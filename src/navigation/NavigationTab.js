@@ -5,6 +5,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import Favorite from "../screen/Favorite";
 import Account from "../screen/Account";
 import PokeDesk from "../screen/PokeDesk";
+import { Platform } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,13 +36,16 @@ export default function NavigationTab() {
         },
         tabBarActiveTintColor: "dodgerblue",
         tabBarInactiveTintColor: "gray",
+        headerTitleAlign:"center"
       })}
     >
       <Tab.Screen name="Favorite" component={Favorite} />
       <Tab.Screen
         name="PokeDesk"
         component={PokeDesk}
-        options={{ tabBarLabel: "" }}
+        options={{ title: Platform.OS === 'ios' ? "Poke Desk Ios" : "Poke Desk Android",
+        tabBarLabel: "",
+       }}
       />
 
       <Tab.Screen name="Account" component={Account} />

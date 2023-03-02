@@ -1,10 +1,11 @@
 import { API_HOST } from "../utils/constant";
 
-export const getPokemonsApi = async () => {
+export const getPokemonsApi = async (nextUrl) => {
   try {
-    const response = await fetch(`${API_HOST}/pokemon/?limit=20&offset=0`);
+    const url = `${API_HOST}/pokemon`;
+    const response = await fetch(nextUrl ? nextUrl : url);
     const json = await response.json();
-    return json.results;
+    return json;
   } catch (error) {
     console.error(error);
   }

@@ -1,27 +1,19 @@
-import {
-  SafeAreaView,
-  View,
-  FlatList,
-  StyleSheet,
-  Text,
-  StatusBar,
-} from "react-native";
+import { SafeAreaView, StyleSheet, StatusBar, View } from "react-native";
 import React from "react";
+import CardPokemon from "./CardPokemon";
 
-const Item = ({ title }) => (
-  <View>
-    <Text>{title}</Text>
-  </View>
-);
-
-export default function ListPokemon({ pokemon }) {
+export default function ListPokemon({ pokemon, loadMorePokemon, isNext }) {
   return (
-    <SafeAreaView>
-      <FlatList
-        data={pokemon}
-        renderItem={({ item }) => <Item title={item.name} />}
-        keyExtractor={(item) => item.id}
-      />
+    <SafeAreaView style={styles.container}>
+        <CardPokemon pokemon={pokemon} loadMorePokemon={loadMorePokemon} isNext = {isNext}/>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "row",
+    margin: 8,
+  }
+});

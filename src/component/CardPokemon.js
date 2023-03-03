@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { POKEMON_TYPE_COLORS } from "../utils/constant";
 import {
   FlatList,
@@ -12,22 +12,22 @@ import {
 import { capitalize } from "lodash";
 import { useState } from "react";
 
-const Item = ({ title, image, color, number }) => (
-  <TouchableOpacity
-    onPress={() => onPress(title)}
-    style={{ ...styles.item, backgroundColor: POKEMON_TYPE_COLORS[color] }}
-  >
-    <Text style={styles.numberId}>{`#${number
-      .toString()
-      .padStart(3, "0")}`}</Text>
-    <Text style={styles.title}>{capitalize(title)}</Text>
-    <Image style={styles.image} source={{ uri: image }} />
-  </TouchableOpacity>
-);
+const Item = memo(({ title, image, color, number }) => {
+  const onPress = (title) => {
+    console.log("press", title);
+  };
 
-const onPress = (title) => {
-  console.log("press", title);
-};
+  return (
+    <TouchableOpacity
+      onPress={() => onPress(title)}
+      style={{ ...styles.item, backgroundColor: POKEMON_TYPE_COLORS[color] }}
+    >
+      <Text style={styles.numberId}>{`#${number.toString().padStart(3, "0")}`}</Text>
+      <Text style={styles.title}>{capitalize(title)}</Text>
+      <Image style={styles.image} source={{ uri: image }} />
+    </TouchableOpacity>
+  );
+});
 
 export default function CardPokemon({ pokemon, loadMorePokemon, isNext }) {
   const [loading, setLoading] = useState(true);
@@ -57,17 +57,20 @@ export default function CardPokemon({ pokemon, loadMorePokemon, isNext }) {
         setLoading(false);
       });
   };
+  
+  const renderItem = ({ item }) => (
+    <Item
+      title={item.name}
+      image={item.img}
+      color={item.type}
+      number={item.id}
+    />
+  )
+
   return (
     <FlatList
       data={pokemon}
-      renderItem={({ item }) => (
-        <Item
-          title={item.name}
-          image={item.img}
-          color={item.type}
-          number={item.id}
-        />
-      )}
+      renderItem={renderItem}
       keyExtractor={(item) => item.id}
       numColumns={2}
       onEndReached={isNext && handleEndReached}

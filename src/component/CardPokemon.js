@@ -7,19 +7,27 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import { capitalize } from "lodash";
 import { useState } from "react";
 
 const Item = ({ title, image, color, number }) => (
-  <View style={{ ...styles.item, backgroundColor: POKEMON_TYPE_COLORS[color] }}>
+  <TouchableOpacity
+    onPress={() => onPress(title)}
+    style={{ ...styles.item, backgroundColor: POKEMON_TYPE_COLORS[color] }}
+  >
     <Text style={styles.numberId}>{`#${number
       .toString()
       .padStart(3, "0")}`}</Text>
     <Text style={styles.title}>{capitalize(title)}</Text>
     <Image style={styles.image} source={{ uri: image }} />
-  </View>
+  </TouchableOpacity>
 );
+
+const onPress = (title) => {
+  console.log("press", title);
+};
 
 export default function CardPokemon({ pokemon, loadMorePokemon, isNext }) {
   const [loading, setLoading] = useState(true);
@@ -35,7 +43,7 @@ export default function CardPokemon({ pokemon, loadMorePokemon, isNext }) {
   };
 
   const handleEndReached = ({ distanceFromEnd }) => {
-    if (isInitialLoad || distanceFromEnd < 0){
+    if (isInitialLoad || distanceFromEnd < 0) {
       setIsInitialLoad(false);
       return;
     }

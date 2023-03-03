@@ -31,6 +31,10 @@ export default function PokeDesk() {
     }
   };
   return (
-    <ListPokemon pokemon={detailsPokemons} loadMorePokemon={fetchPokemons} isNext = {pokemons}/>
+    <ListPokemon
+      pokemon={detailsPokemons}
+      loadMorePokemon={fetchPokemons}
+      isNext={pokemons}
+    />
   );
 }

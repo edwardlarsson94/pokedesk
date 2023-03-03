@@ -23,6 +23,7 @@ const Item = ({ title, image, color, number }) => (
 
 export default function CardPokemon({ pokemon, loadMorePokemon, isNext }) {
   const [loading, setLoading] = useState(true);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const renderFooter = () => {
     if (!loading) return null;
@@ -33,7 +34,11 @@ export default function CardPokemon({ pokemon, loadMorePokemon, isNext }) {
     );
   };
 
-  const handleEndReached = () => {
+  const handleEndReached = ({ distanceFromEnd }) => {
+    if (isInitialLoad || distanceFromEnd < 0){
+      setIsInitialLoad(false);
+      return;
+    }
     setLoading(true);
     loadMorePokemon()
       .then(() => {

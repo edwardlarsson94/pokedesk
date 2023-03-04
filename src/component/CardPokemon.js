@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import { POKEMON_TYPE_COLORS } from "../utils/constant";
 import {
   FlatList,
@@ -11,71 +11,91 @@ import {
 } from "react-native";
 import { capitalize } from "lodash";
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 
-const Item = memo(({ title, image, color, number }) => {
-  const onPress = (title) => {
-    console.log("press", title);
-  };
+const Item = memo(({ title, image, color, number, onPress }) => {
+  const handlePress = useCallback(() => {
+    onPress(title);
+  }, [onPress, title]);
 
   return (
-    <TouchableOpacity
-      onPress={() => onPress(title)}
-      style={{ ...styles.item, backgroundColor: POKEMON_TYPE_COLORS[color] }}
-    >
+    <View style={{ ...styles.item, backgroundColor: POKEMON_TYPE_COLORS[color] }}>
       <Text style={styles.numberId}>{`#${number.toString().padStart(3, "0")}`}</Text>
-      <Text style={styles.title}>{capitalize(title)}</Text>
-      <Image style={styles.image} source={{ uri: image }} />
-    </TouchableOpacity>
+      <TouchableOpacity onPress={handlePress}>
+        <Text style={styles.title}>{capitalize(title)}</Text>
+        <Image style={styles.image} source={{ uri: image }} />
+      </TouchableOpacity>
+    </View>
   );
+});
+
+const MemoizedItem = memo(Item, (prevProps, nextProps) => {
+  if (
+    prevProps.title === nextProps.title &&
+    prevProps.image === nextProps.image &&
+    prevProps.color === nextProps.color &&
+    prevProps.number === nextProps.number
+  ) {
+    return true;
+  }
+  return false;
 });
 
 export default function CardPokemon({ pokemon, loadMorePokemon, isNext }) {
   const [loading, setLoading] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const navigation = useNavigation();
 
-  const renderFooter = () => {
-    if (!loading) return null;
-    return (
-      <View style={{ paddingVertical: 20 }}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  };
+  const handleEndReached = useCallback(
+    ({ distanceFromEnd }) => {
+      if (isInitialLoad || distanceFromEnd < 0) {
+        setIsInitialLoad(false);
+        return;
+      }
+      setLoading(true);
+      loadMorePokemon()
+        .then(() => {
+          setLoading(false);
+        })
+        .catch(() => {
+          console.log("error");
+          setLoading(false);
+        });
+    },
+    [isInitialLoad, loadMorePokemon]
+  );
 
-  const handleEndReached = ({ distanceFromEnd }) => {
-    if (isInitialLoad || distanceFromEnd < 0) {
-      setIsInitialLoad(false);
-      return;
-    }
-    setLoading(true);
-    loadMorePokemon()
-      .then(() => {
-        setLoading(false);
-      })
-      .catch(() => {
-        console.log("error");
-        setLoading(false);
-      });
-  };
-  
-  const renderItem = ({ item }) => (
-    <Item
-      title={item.name}
-      image={item.img}
-      color={item.type}
-      number={item.id}
-    />
-  )
+  const handleNavigateToDetails = useCallback(
+    (name) => {
+      navigation.navigate("DetailsPokemon", { name });
+    },
+    [navigation]
+  );
+
+  const renderItem = useCallback(
+    ({ item }) => (
+      <MemoizedItem
+        key={item.id}
+        title={item.name}
+        image={item.img}
+        color={item.type}
+        number={item.id}
+        onPress={() => handleNavigateToDetails(item.name)}
+      />
+    ),
+    [handleNavigateToDetails]
+  );
 
   return (
     <FlatList
       data={pokemon}
+      extraData={pokemon}
       renderItem={renderItem}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => String(item.id)}
       numColumns={2}
       onEndReached={isNext && handleEndReached}
       onEndReachedThreshold={0.1}
-      ListFooterComponent={isNext && renderFooter}
+      ListFooterComponent={isNext && loading && <ActivityIndicator size="large" />}
     />
   );
 }
@@ -106,6 +126,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     position: "absolute",
     right: 0,
-    bottom: 0,
+    top: 0,
   },
 });

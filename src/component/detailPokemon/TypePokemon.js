@@ -8,10 +8,17 @@ export default function TypePokemon({ pokemon }) {
   return (
     <View style={styles.item}>
       {pokemon?.types.map((item) => {
-        return <Text style={{
-            ...styles.texts,
-            backgroundColor: POKEMON_TYPE_COLORS[item?.type.name]
-        }}>{capitalize(item?.type.name)}</Text>;
+        return (
+          <Text
+            key={item.type.name}
+            style={{
+              ...styles.texts,
+              backgroundColor: POKEMON_TYPE_COLORS[item?.type.name],
+            }}
+          >
+            {capitalize(item?.type.name)}
+          </Text>
+        );
       })}
     </View>
   );
@@ -23,7 +30,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
     },
     texts:{
         width: 80,

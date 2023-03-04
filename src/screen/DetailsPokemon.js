@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { getPokemonDetailSelected } from '../api/getPokemonsApi';
 import { useState } from 'react';
 import HeaderPokemon from '../component/detailPokemon/HeaderPokemon';
+import TypePokemon from '../component/detailPokemon/TypePokemon';
 
 
 const DetailsPokemon = ({ route }) => {
@@ -28,6 +29,7 @@ const DetailsPokemon = ({ route }) => {
   return (
     <View>
       <HeaderPokemon pokemon={pokemon} img={img}/>
+      <TypePokemon pokemon={pokemon}/>
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, StatusBar, View } from "react-native";
+import { SafeAreaView, StyleSheet, StatusBar, Platform } from "react-native";
 import React from "react";
 import CardPokemon from "./CardPokemon";
 
@@ -15,5 +15,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     margin: 8,
+    marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   }
 });

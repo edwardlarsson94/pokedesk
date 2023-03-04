@@ -17,8 +17,9 @@ export default function NavigationStack() {
       <Stack.Screen
         name="DetailsPokemon"
         component={DetailsPokemon}
-        options={{ title: Platform.OS === 'ios' ? "Details Pokemon Ios" : "Details Pokemon Android",    
-        headerBackTitle: 'Back'
+        options={{ title: Platform.OS === 'ios' ? "" : "",    
+        headerBackTitle: 'Back',
+        headerTransparent: true,
       }}
       />
     </Stack.Navigator>

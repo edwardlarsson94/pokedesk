@@ -20,3 +20,14 @@ export const getPokemonsDetailsApi = async (url) => {
     console.error(error);
   }
 };
+
+export const getPokemonDetailSelected = async (id) => {
+  try {
+    const url = `${API_HOST}/pokemon/${id}`;
+    const response = await fetch(url);
+    const json = await response.json();
+    return json;
+  } catch (error) {
+    console.error(error);
+  }
+};

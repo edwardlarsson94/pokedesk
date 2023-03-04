@@ -8,6 +8,8 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
+  SafeAreaView,
+  Platform,
 } from "react-native";
 import { capitalize } from "lodash";
 import { useState } from "react";
@@ -19,13 +21,13 @@ const Item = memo(({ title, image, color, number, onPress }) => {
   }, [onPress, title]);
 
   return (
-    <View style={{ ...styles.item, backgroundColor: POKEMON_TYPE_COLORS[color] }}>
+    <SafeAreaView style={{ ...styles.item, backgroundColor: POKEMON_TYPE_COLORS[color] }}>
       <Text style={styles.numberId}>{`#${number.toString().padStart(3, "0")}`}</Text>
       <TouchableOpacity onPress={handlePress}>
         <Text style={styles.title}>{capitalize(title)}</Text>
         <Image style={styles.image} source={{ uri: image }} />
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 });
 
@@ -66,8 +68,8 @@ export default function CardPokemon({ pokemon, loadMorePokemon, isNext }) {
   );
 
   const handleNavigateToDetails = useCallback(
-    (name) => {
-      navigation.navigate("DetailsPokemon", { name });
+    (id,img) => {
+      navigation.navigate("DetailsPokemon", { id,img });
     },
     [navigation]
   );
@@ -80,7 +82,7 @@ export default function CardPokemon({ pokemon, loadMorePokemon, isNext }) {
         image={item.img}
         color={item.type}
         number={item.id}
-        onPress={() => handleNavigateToDetails(item.name)}
+        onPress={() => handleNavigateToDetails(item.id,item.img)}
       />
     ),
     [handleNavigateToDetails]
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
     height: 90,
     marginRight: 10,
     position: "absolute",
-    right: 0,
+    right: Platform === "ios" ? -8 : -20,
     top: 0,
   },
 });

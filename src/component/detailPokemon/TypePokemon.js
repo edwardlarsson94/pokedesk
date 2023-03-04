@@ -26,7 +26,7 @@ export default function TypePokemon({ pokemon }) {
 
 const styles = StyleSheet.create({  
     item: { 
-        marginVertical: 300,
+        marginTop: 350,
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",

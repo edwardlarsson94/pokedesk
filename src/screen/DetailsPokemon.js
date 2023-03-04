@@ -4,6 +4,7 @@ import { getPokemonDetailSelected } from '../api/getPokemonsApi';
 import { useState } from 'react';
 import HeaderPokemon from '../component/detailPokemon/HeaderPokemon';
 import TypePokemon from '../component/detailPokemon/TypePokemon';
+import StatsPokemon from '../component/detailPokemon/StatsPokemon';
 
 
 const DetailsPokemon = ({ route }) => {
@@ -30,6 +31,7 @@ const DetailsPokemon = ({ route }) => {
     <View>
       <HeaderPokemon pokemon={pokemon} img={img}/>
       <TypePokemon pokemon={pokemon}/>
+      <StatsPokemon pokemon={pokemon}/>
     </View>
   );
 };

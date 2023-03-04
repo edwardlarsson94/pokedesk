@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: Platform.OS === "ios" ? 90 : 70,
+    marginTop: Platform.OS === "ios" ? 90 : 70,
     marginHorizontal: 20,
   },
   numberId: {
